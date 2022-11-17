@@ -1,0 +1,196 @@
+<html>
+
+<head>
+	<title>Early Detection of Forest Fires</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="/static/style.css">
+	<style>
+
+	</style>
+</head>
+
+<body style="background-color:black;">
+	<!-- <div class="header">Early Detection of Forest Fires</div> -->
+	<div class="container text-center mb-10" style="padding-top:50px;">
+		<div>
+			<h1 style="font-size: 46px; color: white;">EARLY DETECTION OF <span style="color:firebrick">FOREST FIRES
+				</span></h1>
+		</div>
+	</div>
+
+	<section class="site-section" id="section-about" style="padding-top: 200px;">
+		<div class="container">
+			<div class="row mb-5 align-items-center">
+				<div class="row mb-5">
+					<div class="section-heading text-center text-align">
+						<h2 style="color: white;">PREDICTION <strong style="color:firebrick;">FOREST FIRE</strong></h2>
+					</div>
+					<p style="color: white;"> Forest fires are increasing in prevalence, damaging ecosystems, and
+						costing lives.
+						Early detection systems are vital to preventing the detrimental impact of these fires that
+						rapidly spread across landscapes.
+						Over recent years, several optical systems have been developed that can act as early warning
+						systems.</p>
+
+					<p style="color: white;"> Forest fires are a major Environmental issue,Creating economic and
+						ecological damage while endangering human lives
+					</p>
+				</div>
+				<div class="row mb-5" style="padding-left: 450px;">
+					<a href="#section2"> <button class="button button3 text-center">DROP THE IMAGE HERE!</button> </a>
+					<style>
+						.button {
+							background-color: #4CAF50;
+							/* Green */
+							border: none;
+							color: white;
+							padding: 16px 32px;
+							text-align: center;
+							text-decoration: none;
+							display: inline-block;
+							font-size: 16px;
+							margin: 4px 2px;
+							transition-duration: 0.4s;
+							cursor: pointer;
+							border-radius: 4px;
+						}
+
+
+						.button3 {
+							background-color: white;
+							color: black;
+							border: 2px solid #f44336;
+						}
+
+						.button3:hover {
+							background-color: #f44336;
+							color: white;
+						}
+					</style>
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+	</div>
+
+
+	<div class="predictimg" id="section2" style="background-color:beige;">
+		<section id="main">
+			<div class="text-center mb-8">
+				<p>
+					<h2 class="mb-5" style="font-size:25px; font-weight: bolder;">PREDICTION ON <span style="color:firebrick;">IMAGE </span></h2>
+				<h3 style="font-size:25px; font-weight: bolder;"> CLICK ON CHOOSE AND <span style="color: firebrick;"> UPLOAD THE IMAGE .... </span></h3>
+				</p>
+
+			</div>
+
+		</section>
+
+		<div class="container border border-danger rounded ">
+			<div class="text-center">
+				<h4 class="mb-5" style="font-size:25px; font-weight: bolder;">UPLOAD YOUR IMAGE</h4>
+
+				<form action="http://localhost:5000/" id="upload-file" method="post" enctype="multipart/form-data">
+					<label for="imageUpload" class="button button3">
+						CHOOSE IMAGE
+					</label>
+					<input type="file" name="image" id="imageUpload" accept=".png, .jpg, .jpeg">
+				</form>
+
+
+				<div class="image-section mb-5" style="display:none; padding-left:400px;">
+					<div class="img-preview">
+						<div id="imagePreview">
+						</div>
+					</div>
+				</div>
+
+				<div class="image-section mb-5" style="display:none;">
+					<div>
+						<button type="button" class="button button3" id="btn-predict">PREDICT!</button>
+					</div>
+				</div>
+
+				<div class="loader " style="display:none;"></div>
+				<div >
+					<h4 class="text-center " >
+						<span id="result" class="alert alert-primary mb-10" role="alert" style="font-size:35px;"> </span>
+					</h4>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+	<script>
+		window.onscroll = function () { myFunction() };
+
+		$(document).ready(function () {
+			// Init
+			$('.image-section').hide();
+			$('.loader').hide();
+			$('#result').hide();
+
+			// Upload Preview
+			function readURL(input) {
+				if (input.files && input.files[0]) {
+					var reader = new FileReader();
+					reader.onload = function (e) {
+						$('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
+						$('#imagePreview').hide();
+						$('#imagePreview').fadeIn(650);
+					}
+					reader.readAsDataURL(input.files[0]);
+				}
+			}
+			$("#imageUpload").change(function () {
+				$('.image-section').show();
+				$('#btn-predict').show();
+				$('#result').text('');
+				$('#result').hide();
+				readURL(this);
+			});
+
+			// Predict
+			$('#btn-predict').click(function () {
+				var form_data = new FormData($('#upload-file')[0]);
+
+				// Show loading animation
+				$(this).hide();
+				$('.loader').show();
+
+				// Make prediction by calling api /predict
+				$.ajax({
+					type: 'POST',
+					url: '/predict',
+					data: form_data,
+					contentType: false,
+					cache: false,
+					processData: false,
+					async: true,
+					success: function (data) {
+						// Get and display the result
+						$('.loader').hide();
+						$('#result').fadeIn(600);
+						$('#result').text('PREDICTION : ' + data);
+						console.log('Success!');
+					},
+				});
+			});
+
+		});
+	</script>
+
+
+
+</body>
+
+</html>
