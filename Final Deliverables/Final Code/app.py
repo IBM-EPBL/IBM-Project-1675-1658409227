@@ -47,20 +47,11 @@ def upload():
         return result
 
 def send_message():
-	account_sid ="ACd799efbbb20dd7f04c7212e051e8720c"
-	auth_token ="68f0332d56c9e386dd7ab82545597619"
-	
-	client = Client(account_sid, auth_token)
-	message = client.messages.create(
-		body="Forest Fire detected , Stay safe!!!",
-		from_="+17088347615",
-		to="+919360116782"
-	)
-	print(message.sid)
-	print("Fire Detected")
-	print("SMS Sent!")
-      
 
+
+	<--- "Enter your Twilio address"-->
+		
+	
     
         
 
